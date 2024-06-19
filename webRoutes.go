@@ -57,7 +57,7 @@ func webStartServer() {
 		v1.POST("/saveconfig", webSaveConfig)
 	}
 	CreateWebsocketServer(router)
-	go router.Run()
+	go router.Run("127.0.0.1:" + strconv.Itoa(conf.HttpPort))
 
 }
 func webSaveConfig(c *gin.Context) {
