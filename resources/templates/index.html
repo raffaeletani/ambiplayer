@@ -1,0 +1,357 @@
+<html>
+    <head>
+        <link href="static/bootstrap-5.3.3-dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="static/ambiplayer/style.css" rel="stylesheet">
+        <script src="static/bootstrap-5.3.3-dist/js/bootstrap.min.js"></script>
+        <script src="static/htmx/htmx.min.js"></script>
+        <script src="static/htmx/json-enc.js"></script>
+    </head>
+    <!--<body hx-get="/" hx-swap="none" hx-trigger="every 1s">-->
+    <body data-bs-theme="dark" hx-swap="none" >
+    <div class="container-fluid min-vh-100 d-flex flex-column">
+        {{if not .Playeronly }}
+        <br>
+        <div class="row">
+            <div class="col-auto">
+                <h3 class="position-relative">
+                    Ambiplayer 2.0&nbsp;
+                    <span id="connectionstatus" class="position-absolute top-0  p-2 bg-danger rounded-circle border border-light">
+                        <span class="visually-hidden">Connection Status</span>
+                      </span>
+                </h3>
+            </div>
+            <div class="col text-end">
+                <button class="btn btn-secondary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-sliders" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M11.5 2a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M9.05 3a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0V3zM4.5 7a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M2.05 8a2.5 2.5 0 0 1 4.9 0H16v1H6.95a2.5 2.5 0 0 1-4.9 0H0V8zm9.45 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m-2.45 1a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0v-1z"/>
+                      </svg>
+                  </button>
+            </div>
+        </div>
+        {{else}}
+        
+        {{end}}
+        
+        <div class="row">
+            {{if not .Playeronly }}
+            <div class="col-lg-4 col-md-12 ">
+                <div class="row">
+                    <div class="col">
+                        <h5>Library</h5>
+                    </div>
+                    <div class="col-auto">
+                        <button class="btn btn-secondary" data-bs-toggle="collapse" data-bs-target="#collapseInfo" aria-expanded="false" aria-controls="collapseInfo">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                                <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
+                            </svg>
+                        </button>
+                    </div>
+                    
+                </div>
+                <div class="row border-top">
+                    <div class="col px-4" id="library">
+                    
+                    </div>
+                    <div class="col-auto px-0 py-3 align-self-center">
+                        <a href="?playeronly=1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-double-left" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M8.354 1.646a.5.5 0 0 1 0 .708L2.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"/>
+                                <path fill-rule="evenodd" d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {{end}}
+            {{if .Playeronly }}
+            <div class="col-auto px-0">
+                <div id="library" class="d-none"></div>
+                
+            </div>
+            <div class="col border-start"><br>
+            {{else}}
+            <div class="col-lg-8 col-md-12 border-start">
+            {{end}}
+                <div class="row collapse mt-lg-0 mt-sm-4" id="collapseInfo">
+                    <div class="col ">
+                        <h5>API Doc</h5>
+                    </div>
+                </div>
+                <div class="row border-top collapse mb-4" id="collapseInfo">
+                    <div class="col-6 border-start ">
+                        REST<hr>
+                        {{range .Routes}}
+                            {{.Path}}
+                            {{if .Params}}
+                            
+                            {{end}}
+                            {{range .Params}}
+                            <br>&nbsp;&nbsp;&nbsp;&nbsp;{{.Name}}={{.Ex}} <i>({{.Type}})</i>
+                            {{end}}
+                            <br>
+                        {{end}}
+                    </div>
+                    <div class="col-6">
+                        OSC
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col ">
+                        <h5>Active Playbacks</h5>
+                    </div>
+                    <div class="col-auto text-end">
+                        <button type="button" hx-get="api/v1/playall" class="btn btn-success"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-play-fill " viewBox="0 0 16 16">
+                            <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393"/>
+                        </svg></button>
+                        
+                        <button type="button" hx-get="api/v1/pauseall" class="btn btn-warning"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pause " viewBox="0 0 16 16">
+                            <path d="M6 3.5a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0V4a.5.5 0 0 1 .5-.5m4 0a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0V4a.5.5 0 0 1 .5-.5"/>
+                        </svg></button>
+                        <button type="button" hx-get="api/v1/stopall" class="btn btn-danger" data-bs-title="Stop all" data-bs-toggle="tooltip">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-stop-fill" viewBox="0 0 16 16">
+                            <path d="M5 3.5h6A1.5 1.5 0 0 1 12.5 5v6a1.5 1.5 0 0 1-1.5 1.5H5A1.5 1.5 0 0 1 3.5 11V5A1.5 1.5 0 0 1 5 3.5"/>
+                        </svg></button>
+                        <button type="button" hx-get="api/v1/fadeoutstopall" class="btn btn-danger" hx-include="#fadeintimeall" data-bs-title="Fadeout & Stop all" data-bs-toggle="tooltip">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-right-square" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm5.854 3.146a.5.5 0 1 0-.708.708L9.243 9.95H6.475a.5.5 0 1 0 0 1h3.975a.5.5 0 0 0 .5-.5V6.475a.5.5 0 1 0-1 0v2.768z"/>
+                              </svg>
+                        </button>
+                        <label  class="col-form-label px-2 py-0">fade (ms)</label>
+                        <input id="fadeintimeall" name="fadetime" style="width: 5em;" class="fadeintime text-end" step="100" type="number" value="{{$.Conf.DefaultFadeTime}}">
+                    </div>
+                </div>
+                <div class="row border-top">
+                    {{if .Playeronly}}
+                    <div class="col-auto px-0 py-3 align-self-center">
+                    <a href="?playeronly=0">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-double-right" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M3.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L9.293 8 3.646 2.354a.5.5 0 0 1 0-.708"/>
+                            <path fill-rule="evenodd" d="M7.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L13.293 8 7.646 2.354a.5.5 0 0 1 0-.708"/>
+                          </svg>
+                        </a>
+                    </div>
+                    {{end}}
+                    <div class="col {{if not .Playeronly }}border-start{{end}} px-4" id="playing">
+
+                    </div>
+                </div>
+        </div>
+        
+    </div>
+    <div class="row flex-grow-1 justify-content-between">
+        <div class="col mt-auto position-relative">
+            <div class="row">
+                {{if .Playeronly}}
+                <div class="col-auto">
+                    <span id="connectionstatus" class="position-absolute top-0 p-2 bg-danger rounded-circle border border-light">
+                        <span class="visually-hidden">Connection Status</span>
+                    </span>
+                </div>
+                {{end}}
+                <div class="col text-center opacity-25 ">
+                    Ambiplayer 2.0
+                </div>
+            </div>
+        </div>
+    </div>  
+</div>
+<template id="libraryrow">
+    <div class="row py-1 my-1 border border-light border-2 rounded libraryrowwrapper">
+
+        <div class="col">                
+            <div>
+                <div class="row">
+                    <div class="col">
+                        <div class="filenamedisplay me-auto">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-auto">
+                     
+                                <button type="button" hx-get="api/v1/start?code=" class=" startbutton btn btn-success"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-play-fill " viewBox="0 0 16 16">
+                                    <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393"/>
+                                </svg></button>    
+                                <button type="button" hx-get="api/v1/start?code=" class="fadeinstartbutton btn btn-success" hx-include="#fadeintime-{{.Code}}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-right-square" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm5.854 8.803a.5.5 0 1 1-.708-.707L9.243 6H6.475a.5.5 0 1 1 0-1h3.975a.5.5 0 0 1 .5.5v3.975a.5.5 0 1 1-1 0V6.707z"/>
+                                      </svg>
+                                </button>                           
+                        
+                            <label  class="col-form-label px-2 py-0">fade (ms)</label><input id="fadeintime-" name="fadetime" style="width: 5em;" class="fadeintime text-end" step="100" type="number" value="{{$.Conf.DefaultFadeTime}}">
+                        
+                    </div>
+                    <div class="col text-end">
+                        <button class="btn btn-danger deletebutton" hx-on::after-request="clearLibrary()" hx-get="api/v1/delete?code=" hx-confirm="Are you sure you wish to delete this library entry?">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                                <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                              </svg>
+                        </button>
+                    </div>
+                    </div> 
+                </div>
+                <div class="row collapse" id="collapseInfo">
+                    <div class="card" >
+                        <div class="form-floating">
+                            <input type="text" class="form-control copycode">
+                            <label>Code</label>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+        </div>
+        
+        
+    </div>
+</template>
+<template id="playingrow">
+    <div class="row py-1 my-1 rowwrapper border border-light border-2 rounded">
+
+        <div class="col">                
+              <div>
+                <div class="row">
+                    <div class="col-md-auto" hx-swap="none">
+                        <div class="hstack d-inline-flex d-md-flex gap-1">
+                        <!--<div class="btn-group" role="group" aria-label="Controls" hx-swap="none">-->
+                           
+                            <button type="button" hx-get="api/v1/play?code=" class="playbutton btn btn-success"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-play-fill " viewBox="0 0 16 16">
+                                <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393"/>
+                            </svg></button>
+                            
+                            <button type="button" hx-get="api/v1/pause?code=" class="pausebutton btn btn-warning"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pause " viewBox="0 0 16 16">
+                                <path d="M6 3.5a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0V4a.5.5 0 0 1 .5-.5m4 0a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0V4a.5.5 0 0 1 .5-.5"/>
+                            </svg></button>
+                       
+                            
+                            
+               
+                            <button type="button" hx-get="api/v1/stop?code=" class="stopbutton btn btn-danger"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-stop-fill" viewBox="0 0 16 16">
+                                <path d="M5 3.5h6A1.5 1.5 0 0 1 12.5 5v6a1.5 1.5 0 0 1-1.5 1.5H5A1.5 1.5 0 0 1 3.5 11V5A1.5 1.5 0 0 1 5 3.5"/>
+                            </svg></button>
+                            <!--<button type="button" hx-get="api/v1/fadeoutstop?code=&fadetime=2000" class="fadeoutstopbutton btn btn-danger"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-graph-down" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M0 0h1v15h15v1H0zm14.817 11.887a.5.5 0 0 0 .07-.704l-4.5-5.5a.5.5 0 0 0-.74-.037L7.06 8.233 3.404 3.206a.5.5 0 0 0-.808.588l4 5.5a.5.5 0 0 0 .758.06l2.609-2.61 4.15 5.073a.5.5 0 0 0 .704.07"/>
+                              </svg></button>
+                            -->
+                              <button type="button" hx-get="api/v1/fadeoutstop?code=" class="fadeoutstopbutton btn btn-danger">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-right-square" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm5.854 3.146a.5.5 0 1 0-.708.708L9.243 9.95H6.475a.5.5 0 1 0 0 1h3.975a.5.5 0 0 0 .5-.5V6.475a.5.5 0 1 0-1 0v2.768z"/>
+                                  </svg>
+                            </button>
+                            
+                        </div>
+                        <div class="mt-2 d-inline-flex">
+                            <label  class="col-form-label pe-2 py-0">fade (ms)</label><input name="fadetime" style="width: 5em;" class="fadeouttime text-end" step="100" type="number" value="500">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <span class="filenamedisplay"></span>
+                        <div class="d-inline float-end" ><small style="font-size:0.7rem" class="volume"></small><input data-locked="false" type="range" value="0" class="volumeslider"/></div>
+                        <div class="row mt-3">
+                            <div class="col">
+                        <progress class="progressbar" value="0" max="100" class="w-100"></progress>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">
+                                <small style="font-size:0.7rem" class="posdisplay"></small>
+                            </div>
+                            <div class="col-4 text-center">
+                                
+                            </div>
+                            <div class="col-4 text-end">
+                                <small style="font-size:0.7rem" class="remainingdisplay"></small>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                
+            </div>
+            
+        </div>
+        
+        
+    </div>
+    </template>
+
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title" id="offcanvasExampleLabel">Menu</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <h6>Audio File Stuff</h6>
+            <div class="list-group">
+             
+                <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-start p-2">
+                    <div class="me-auto" hx-on::before-request="clearLibrary()" hx-get="api/v1/reload" hx-indicator="#spinner">Reload</div>
+                    <button hx-on::before-request="clearLibrary()" class="btn btn-warning" hx-get="api/v1/reload" hx-indicator="#spinner">
+                        <svg class="my-indicator htmx-indicator" id="spinner"width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><radialGradient id="a10" cx=".66" fx=".66" cy=".3125" fy=".3125" gradientTransform="scale(1.5)"><stop offset="0" stop-color="#000000"></stop><stop offset=".3" stop-color="#000000" stop-opacity=".9"></stop><stop offset=".6" stop-color="#000000" stop-opacity=".6"></stop><stop offset=".8" stop-color="#000000" stop-opacity=".3"></stop><stop offset="1" stop-color="#000000" stop-opacity="0"></stop></radialGradient><circle transform-origin="center" fill="none" stroke="url(#a10)" stroke-width="29" stroke-linecap="round" stroke-dasharray="200 1000" stroke-dashoffset="0" cx="100" cy="100" r="70"><animateTransform type="rotate" attributeName="transform" calcMode="spline" dur="2" values="360;0" keyTimes="0;1" keySplines="0 0 1 1" repeatCount="indefinite"></animateTransform></circle><circle transform-origin="center" fill="none" opacity=".2" stroke="#000000" stroke-width="29" stroke-linecap="round" cx="100" cy="100" r="70"></circle></svg>
+                        <svg class="my-indicator-static" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><radialGradient id="a10" cx=".66" fx=".66" cy=".3125" fy=".3125" gradientTransform="scale(1.5)"><stop offset="0" stop-color="#000000"></stop><stop offset=".3" stop-color="#000000" stop-opacity=".9"></stop><stop offset=".6" stop-color="#000000" stop-opacity=".6"></stop><stop offset=".8" stop-color="#000000" stop-opacity=".3"></stop><stop offset="1" stop-color="#000000" stop-opacity="0"></stop></radialGradient><circle transform-origin="center" fill="none" stroke="url(#a10)" stroke-width="29" stroke-linecap="round" stroke-dasharray="200 1000" stroke-dashoffset="0" cx="100" cy="100" r="70"></circle><circle transform-origin="center" fill="none" opacity=".2" stroke="#000000" stroke-width="29" stroke-linecap="round" cx="100" cy="100" r="70"></circle></svg>
+                        </button>
+                </div>
+                
+                <div class="list-group-item list-group-item-action p-2">
+                    
+                    <form id='uploadform' class="p-0 mb-0 d-flex justify-content-between align-items-start" hx-encoding='multipart/form-data' hx-post='/api/v1/upload'>
+                        <span id="uplaodfilename">Select file to upload</span>
+                        <div class="btn-group">
+                            <button class="btn btn-light position-relative">    
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-music-fill" viewBox="0 0 16 16">
+                                    <path d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0M9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1M11 6.64v1.75l-2 .5v3.61c0 .495-.301.883-.662 1.123C7.974 13.866 7.499 14 7 14s-.974-.134-1.338-.377C5.302 13.383 5 12.995 5 12.5s.301-.883.662-1.123C6.026 11.134 6.501 11 7 11c.356 0 .7.068 1 .196V6.89a1 1 0 0 1 .757-.97l1-.25A1 1 0 0 1 11 6.64"/>
+                                </svg>       
+                                <input type='file' name='file' onchange="setupdloadfilename(this)" class="file-input" placeholder="upload">
+                            </button>
+                            <button class="btn btn-success">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-upload" viewBox="0 0 16 16">
+                                    <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>
+                                    <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708z"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <br>
+            <h6>Config</h6>
+            <form class="p-0" hx-post='/api/v1/saveconfig' hx-ext='json-enc' >
+               
+                        <div class="hstack">
+                            <div class="form-floating">
+                                <input id="conffadetime" class="form-control text-end" type="number" name="defaultfadetime" value="{{.Conf.DefaultFadeTime}}">
+                                <label for="conffadetime">fade time</label>
+                            </div>
+                        
+                            <div class="form-floating">
+                                <input id="confhttpport" class="form-control text-end" type="number" name="httpport" value="{{.Conf.HttpPort}}">
+                                <label for="confhttpport">http port</label>
+                            </div>
+                        
+                            <div class="form-floating">
+                                <input id="confoscport" class="form-control text-end" type="number" name="oscport" value="{{.Conf.OSCPort}}">
+                                <label for="confoscport">osc port</label>
+                            </div>
+                        </div>
+                    
+                        <div class="form-floating">
+                            <input id="confsoundfolder" class="form-control" type="text" name="soundfolder" value="{{.Conf.SoundFolder}}">
+                            <label for="confsoundfolder">Sounds Folder Location</label>
+                        </div>
+                    
+                        <button class="btn btn-success ms-auto">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-floppy2" viewBox="0 0 16 16">
+                                <path d="M1.5 0h11.586a1.5 1.5 0 0 1 1.06.44l1.415 1.414A1.5 1.5 0 0 1 16 2.914V14.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 14.5v-13A1.5 1.5 0 0 1 1.5 0M1 1.5v13a.5.5 0 0 0 .5.5H2v-4.5A1.5 1.5 0 0 1 3.5 9h9a1.5 1.5 0 0 1 1.5 1.5V15h.5a.5.5 0 0 0 .5-.5V2.914a.5.5 0 0 0-.146-.353l-1.415-1.415A.5.5 0 0 0 13.086 1H13v3.5A1.5 1.5 0 0 1 11.5 6h-7A1.5 1.5 0 0 1 3 4.5V1H1.5a.5.5 0 0 0-.5.5m9.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5z"/>
+                              </svg>
+                        </button>
+                 
+            </form>
+        </div>
+    </div>
+    <script src="static/ambiplayer/script.js"></script>
+</body>
+</html>
