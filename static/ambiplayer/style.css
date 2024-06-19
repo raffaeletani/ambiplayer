@@ -1,0 +1,45 @@
+.my-indicator{
+    display:none;
+}
+.my-indicator + .my-indicator-static{
+    display:inline;
+}
+.htmx-request .my-indicator{
+    display:inline;
+}
+.htmx-request .my-indicator + .my-indicator-static{
+    display:none;
+}
+.htmx-request.my-indicator{
+    display:inline;
+}
+.htmx-request.my-indicator + .my-indicator-static{
+    display:none;
+}
+.custom-file-uploadqq {
+        position: relative;
+        padding: 10px;
+        cursor: pointer;
+        background-color: #3498db;
+        color: #fff;
+        border-radius: 5px;
+    }
+
+    .file-input {
+        position:absolute; 
+        left:0;
+        top:0;
+        width:100%;
+        height:100%;
+        box-sizing: border-box;
+        display: inline-block;
+        cursor: pointer;
+        opacity:0;
+    }
+    ::-webkit-file-upload-button,
+::file-selector-button {
+display: none;
+}
+.filenamedisplay{
+font-weight:bold;
+}
