@@ -14,7 +14,7 @@ So Ambiplayer got born.
 - Play multiple instances of the same sound
 - Control all playing sounds
 
-in short, it's a glorified soundboard with a web gui (go to http://<ip>:<port> in your browser eg. http://localhost:8080) and api.
+in short, it's a glorified soundboard with a web gui (go to http://\<ip\>:\<port\> in your browser eg. http://localhost:8080) and api.
 
 # What's next?
 
