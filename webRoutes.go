@@ -109,11 +109,13 @@ func webFadeOutStopAll(c *gin.Context) {
 	FadeoutStopAll(fadetime)
 }
 func webPlay(c *gin.Context) {
-	audiofile, err := GetAudioFileByCode(c.Query("code"))
+	playbacks, err := GetPlaybacksByCode(c.Query("code"))
 	if err != nil {
-		return
+		fmt.Println(err)
 	}
-	go PlaySound(audiofile)
+	for _, playback := range playbacks {
+		go PlaySound(playback)
+	}
 }
 func webStart(c *gin.Context) {
 	audiofile, err := GetAudioFileByCode(c.Query("code"))
@@ -131,14 +133,13 @@ func webStart(c *gin.Context) {
 	})
 }
 func webPause(c *gin.Context) {
-	audiofile, err := GetAudioFileByCode(c.Query("code"))
+	playbacks, err := GetPlaybacksByCode(c.Query("code"))
 	if err != nil {
-		return
+		fmt.Println(err)
 	}
-	go PauseSound(audiofile)
-	c.JSON(200, gin.H{
-		"message": "pong",
-	})
+	for _, playback := range playbacks {
+		go PauseSound(playback)
+	}
 }
 func webPauseAll(c *gin.Context) {
 	for _, audiofile := range Playing {
@@ -158,14 +159,13 @@ func webPlayAll(c *gin.Context) {
 	})
 }
 func webStop(c *gin.Context) {
-	audiofile, err := GetAudioFileByCode(c.Query("code"))
+	playbacks, err := GetPlaybacksByCode(c.Query("code"))
 	if err != nil {
-		return
+		fmt.Println(err)
 	}
-	go StopSound(audiofile)
-	c.JSON(200, gin.H{
-		"message": "pong",
-	})
+	for _, playback := range playbacks {
+		go StopSound(playback)
+	}
 }
 
 func webFadeOutStop(c *gin.Context) {
@@ -174,14 +174,13 @@ func webFadeOutStop(c *gin.Context) {
 	if err != nil {
 		return
 	}
-	audiofile, err := GetAudioFileByCode(c.Query("code"))
+	playbacks, err := GetPlaybacksByCode(c.Query("code"))
 	if err != nil {
-		return
+		fmt.Println(err)
 	}
-	go FadeoutStop(audiofile, fadetime)
-	c.JSON(200, gin.H{
-		"message": "pong",
-	})
+	for _, playback := range playbacks {
+		go FadeoutStop(playback, fadetime)
+	}
 }
 
 func webDelete(c *gin.Context) {

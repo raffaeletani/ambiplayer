@@ -30,19 +30,40 @@ function createLibrary(json){
         if (elem == null) {
             elem = libtemplate.content.cloneNode(true);
             elem.querySelector('.libraryrowwrapper').setAttribute('id', 'library-'+data.Code)
-            playbutton = elem.querySelector('.startbutton')
-            playbutton.setAttribute('hx-get', 'api/v1/start?code=' + data.Code)
+
+            fadeintime = elem.querySelector('.fadeintimelib')
+            fadeintime.value=data.DefaultFadeTime
+            fadeintime.setAttribute('id', 'fadeintimelib-' + data.Code)
+            fadeouttime = elem.querySelector('.fadeouttimelib')
+            fadeouttime.value=data.DefaultFadeTime
+            fadeouttime.setAttribute('id', 'fadeouttimelib-' + data.Code)
+
+            startbutton = elem.querySelector('.startbutton')
+            startbutton.setAttribute('hx-get', 'api/v1/start?code=' + data.Code)
+
+            fadeinstartbutton = elem.querySelector('.fadeinstartbutton')
+            fadeinstartbutton.setAttribute('hx-get', 'api/v1/start?code=' + data.Code)
+            fadeinstartbutton.setAttribute('hx-include', '#fadeintimelib-' + data.Code)
+
+            playbutton = elem.querySelector('.playbutton')
+            playbutton.setAttribute('hx-get', 'api/v1/play?code=' + data.Code)
+
+            pausebutton = elem.querySelector('.pausebutton')
+            pausebutton.setAttribute('hx-get', 'api/v1/pause?code=' + data.Code)
+
+            stopbutton = elem.querySelector('.stopbutton')
+            stopbutton.setAttribute('hx-get', 'api/v1/stop?code=' + data.Code)
+
+            fadeoutstopbutton = elem.querySelector('.fadeoutstopbutton')
+            fadeoutstopbutton.setAttribute('hx-get', 'api/v1/fadeoutstop?code=' + data.Code)
+            fadeoutstopbutton.setAttribute('hx-include', '#fadeouttimelib-' + data.Code)
 
             deletebutton = elem.querySelector('.deletebutton')
             deletebutton.setAttribute('hx-get', 'api/v1/delete?code=' + data.Code)
 
-            fadeinstartbutton = elem.querySelector('.fadeinstartbutton')
-            fadeinstartbutton.setAttribute('hx-get', 'api/v1/start?code=' + data.Code)
-            fadeinstartbutton.setAttribute('hx-include', '#fadeintime-' + data.Code)
             
-            fadeintime = elem.querySelector('.fadeintime')
-            fadeintime.value=data.DefaultFadeTime
-            fadeintime.setAttribute('id', 'fadeintime-' + data.Code)
+            
+            
 
             elem.querySelector('.copycode').value = data.Code
             container.append(elem)

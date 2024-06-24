@@ -53,6 +53,7 @@ type AudioFile struct {
 	Buffer      *beep.Buffer
 	Streamer    beep.Streamer
 	Seek        Seek
+	Parent      *AudioFile
 }
 
 var AudioFiles []*AudioFile

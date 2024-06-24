@@ -124,15 +124,27 @@ func FadeoutStop(audiofile *AudioFile, fadetime int) {
 	doFade(audiofile, -1, fadetime, true)
 }
 
+func GetPlaybacksByCode(code string) ([]*AudioFile, error) {
+	var audiofiles []*AudioFile
+
+	for _, audiofile := range Playing {
+		if audiofile.Parent.Code == code || audiofile.Code == code {
+			audiofiles = append(audiofiles, audiofile)
+		}
+	}
+
+	if len(audiofiles) < 1 {
+		return audiofiles, errors.New("no audiofile found with this code")
+	}
+
+	return audiofiles, nil
+}
+
 func GetAudioFileByCode(code string) (*AudioFile, error) {
 	var audiofile AudioFile
 	idx := slices.IndexFunc(AudioFiles, func(c *AudioFile) bool { return c.Code == code })
 	if idx >= 0 {
 		return AudioFiles[idx], nil
-	}
-	idx = slices.IndexFunc(Playing, func(c *AudioFile) bool { return c.Code == code })
-	if idx >= 0 {
-		return Playing[idx], nil
 	}
 	return &audiofile, errors.ErrUnsupported
 
@@ -177,6 +189,9 @@ func StartSound(sourcefile *AudioFile, loop bool, fadeInTime int, code string) {
 	audiofile := new(AudioFile)
 	*audiofile = *sourcefile
 	playingmut.Lock()
+
+	//Store reference to parent
+	audiofile.Parent = sourcefile
 	Playing = append(Playing, audiofile)
 	playingmut.Unlock()
 	audiofile.Code = uuid.New().String()
